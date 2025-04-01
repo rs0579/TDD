@@ -25,6 +25,7 @@
     "ts-node": "^10.9.2"
   },
   "dependencies": {
+    "@testing-library/cypress": "^10.0.3",
     "@vitejs/plugin-react": "^4.3.1",
     "vitest": "^2.0.3"
   }
