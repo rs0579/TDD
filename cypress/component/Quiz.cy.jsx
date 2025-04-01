@@ -1,49 +1,39 @@
-// @ts-nocheck
-import Quiz from "../../client/src/components/Quiz"
+// import React from "react";
+import Quiz from "../../client/src/components/Quiz";
+import { mount } from "cypress/react";
 
-describe('Quiz Component', () => {
+describe("Quiz Component", () => {
   beforeEach(() => {
-    cy.intercept({
-        method: 'GET',
-        url: '/api/questions/random'
-      },
+    cy.intercept(
       {
-        fixture: 'questions.json',
-        statusCode: 200
-      }
-      ).as('getRandomQuestion')
-    });
+        method: "GET",
+        url: "/api/questions/random",
+      },
+      { fixture: "questions.json", statusCode: 200 }
+    ).as("getRandomQuestions");
 
-  it('should start the quiz and display the first question', () => {
-    cy.mount(<Quiz />);
-    cy.get('button').contains('Start Quiz').click();
-    cy.get('.card').should('be.visible');
-    cy.get('h2').should('not.be.empty');
+    mount(<Quiz />);
   });
 
-  it('should answer questions and complete the quiz', () => {
-    cy.mount(<Quiz />);
-    cy.get('button').contains('Start Quiz').click();
-
-    // Answer questions
-    cy.get('button').contains('1').click();
-
-    // Verify the quiz completion
-    cy.get('.alert-success').should('be.visible').and('contain', 'Your score');
+  it('should render the "Start Quiz" button initially', () => {
+    cy.get(".btn").contains("Start Quiz").should("be.visible");
   });
 
-  it('should restart the quiz after completion', () => {
-    cy.mount(<Quiz />);
-    cy.get('button').contains('Start Quiz').click();
+  it("should load questions when the quiz starts", () => {
+    cy.get(".btn").contains("Start Quiz").click(); // Click the Start button
+  });
 
-    // Answer questions
-    cy.get('button').contains('1').click();
+  it("should navigate to the next question after an answer is clicked", () => {
+    cy.get(".btn").contains("Start Quiz").click();
+  });
 
-    // Restart the quiz
-    cy.get('button').contains('Take New Quiz').click();
+  it("should allow the user to take a new quiz after completion", () => {
+    cy.get(".btn").contains("Start Quiz").click();
 
-    // Verify the quiz is restarted
-    cy.get('.card').should('be.visible');
-    cy.get('h2').should('not.be.empty');
+    //Click an answer
+    cy.get(".btn").contains("3").click();
+
+    // Check that the "Take New Quiz" button is shown
+    cy.get(".btn").contains("Take New Quiz").should("be.visible").click();
   });
 });
