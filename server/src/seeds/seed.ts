@@ -14,8 +14,9 @@ db.once('open', async () => {
 });
 
 
+
 // import db from '../config/connection.js';
-// import { Question } from '../models/index.js'
+// import Question  from '../models/Question.js'
 // import cleanDB from './cleanDb.js';
 
 // import questionData from './pythonQuestions.json' with { type: 'json'};
